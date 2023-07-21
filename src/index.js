@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const carRoute = require("./routes/carRoutes")
 const userRoute = require("./routes/userRoutes")
 const dealershipRoute = require("./routes/dealershipRoutes")
+const dealRoutes = require("./routes/dealRoutes")
 dotenv.config();
 
 const app = express();
@@ -15,6 +16,9 @@ app.use('/api/auth', authRoutes);
 app.use("/api/user" , userRoute)
 app.use("/api/car" , carRoute)
 app.use("/api/dealership" , dealershipRoute)
+app.use("/api/deal" , dealRoutes)
+
+
 
 
 connectDb()

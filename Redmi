@@ -1,0 +1,27 @@
+- src/
+  - controllers/
+    - authController.js
+    - userController.js
+    - dealershipController.js
+  - middleware/
+    - authMiddleware.js
+  - models/
+    - adminModel.js
+    - userModel.js
+    - dealershipModel.js
+    - carModel.js
+    - dealModel.js
+    - soldVehicleModel.js
+  - utils/
+    - errorHandlers.js
+    - jwt.js
+  - routes/
+    - authRoutes.js
+    - userRoutes.js
+    - dealershipRoutes.js
+    - carRoutes.js
+    - dealRoutes.js
+    - soldVehicleRoutes.js
+  - app.js
+  - config.js
+  - index.js

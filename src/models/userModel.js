@@ -1,20 +1,37 @@
 
 const { getDb } = require('../helpers/database.js');
+const { ObjectId } = require('mongodb');
 
 const User = {
-  save: async function (name, email, password) {
+  save: async function (user) {
     const db = getDb();
-    const existingUser = await db.collection('users').findOne({ email });
-    if (existingUser) {
-      throw new Error('Email already exists');
-      
-    }
-    return db.collection('users').insertOne({ name, email, password });
+    const result = await db.collection('users').insertOne(user);
+    return result;
   },
-  findByEmail: function (email) {
-    const db = getDb ();
-    return db.collection('users').findOne({ email });
+
+  findById: async function (id) {
+    const db = getDb();
+    return db.collection('users').findOne({_id : new ObjectId(id)});;
+  },
+
+  findByEmail: async function (email) {
+    const db = getDb();
+    return db.collection('users').findOne({ email: email });
+  },
+
+  getAllUsers: async function () {
+    const db = getDb();
+    return db.collection('users').find({}).toArray();
+  },
+
+  updateUserVehicles: async function (userId, carId) {
+    const db = getDb();
+    return db.collection('users').updateOne(
+      { _id: userId },
+      { $push: { vehicle_info: carId } }
+    );
   },
 };
 
 module.exports = User;
+

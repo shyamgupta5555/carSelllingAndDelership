@@ -1,14 +1,14 @@
-const CarModel = require("../models/carModel")
+const Car = require("../models/carModel")
 
 // Create a new car
 exports.createCar = async (req, res) => {
-  const { make, model, year, dealershipId } = req.body;
+  const { name, model, type, car_info } = req.body;
 
   try {
-    const car = new CarModel(make, model, year, dealershipId);
-    await car.save();
+    const car = {  name: name, model: model,type: type, car_info:[car_info] };
 
-    res.json(car);
+    await Car.save(car);
+    res.status(201).json(car);
   } catch (error) {
     return res.status(500).send({message :error.message})
 
@@ -18,7 +18,7 @@ exports.createCar = async (req, res) => {
 // Get all cars
 exports.getAllCars = async (req, res) => {
   try {
-    const cars = await CarModel.getAll();
+    const cars = await Car.getAllCars();
     res.json(cars);
   } catch (error) {
     return res.status(500).send({message :error.message})
@@ -31,13 +31,14 @@ exports.getCarById = async (req, res) => {
   const { carId } = req.params;
 
   try {
-    const car = await CarModel.getById(carId);
+    const car = await Car.findById(carId);
 
     if (!car) {
       return res.status(404).json({ message: 'Car not found' });
     }
 
-    res.json(car);
+    return res.status(200).send({data :car})
+
   } catch (error) {
     return res.status(500).send({message :error.message})
 
