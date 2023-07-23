@@ -5,7 +5,7 @@ const {authentication ,authorization} =require("../middleware/authentication")
 router.post('/', createUser);
 router.post('/login', login);
 router.get('/',authentication, getAllUsers);
-router.get('/:userId',authentication, getUserById);
+router.get('/:userId',authentication ,authorization, getUserById);
 router.put('/:userId/vehicles',authentication,authorization, updateUserVehicles);
 
 module.exports = router

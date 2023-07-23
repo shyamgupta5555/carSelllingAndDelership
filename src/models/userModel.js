@@ -27,12 +27,13 @@ const User = {
     return db.collection('users').find({}).toArray();
   },
 
-  updateUserVehicles: async function (userId, carId) {
+  updateUserVehicles: async function (userId, SoldVehicleId) {
     const db = getDb();
-    return db.collection('users').updateOne(
+   const x = await db.collection('users').updateOne(
       { _id: userId },
-      { $push: { vehicle_info: carId } }
+      {  $addToSet: { vehicle_info: SoldVehicleId } }
     );
+    return x
   },
 };
 

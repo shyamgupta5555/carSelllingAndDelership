@@ -13,12 +13,14 @@ exports.soldCarUser = async (req,res)=>{
 
     const checkCar = await Car.findById(car_id)
     if(!checkCar)return res.status(400).send({message:'carId not valid'})
+   
     const checkUser = await User.findById(user_id)
     if(!checkUser)return res.status(400).send({message:' user id not valid'})
-
-   const SoldVehicleId = await SoldVehicles.save(car_id , user_id )
-   const addCar = await User.updateUserVehicles(user_id)
-   
+    
+   const SoldVehicleId = await SoldVehicles.save({car_id :car_id , user_id :user_id })
+  
+   const addCar = await User.updateUserVehicles(user_id ,SoldVehicleId)
+  console.log(addCar)
   res.status(400).send({"message": "Deal created successfully" ,SoldVehicleId })
 
   }catch(error){

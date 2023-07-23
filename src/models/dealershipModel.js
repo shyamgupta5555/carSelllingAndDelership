@@ -10,9 +10,10 @@ const  DealershipSchema = {
 
   findByEmail: async function (email) {
     const db = getDb();
-    return db.collection('dealerships').findOne({ dealership_email: email });
+    return  await db.collection('dealerships').findOne({ email: email });
   },
 
+  
   findById: async function (id) {
     const db = getDb();
     return db.collection('dealerships').findOne({ _id: new ObjectId(id) });
@@ -30,7 +31,7 @@ const  DealershipSchema = {
       { $addToSet: { cars: carId } }
     );;
   },
-  
+
   addCarToDealership: async function (dealershipId, carId) {
     const db = getDb();
     return db.collection('dealerships').updateOne(

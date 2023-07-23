@@ -24,13 +24,13 @@ exports.authentication = async (req, res, next) => {
 exports.authorization = async (req, res, next) => {
   try {
     let id = req.id;
-    let dealershipId = req.body.dealershipId;
+    let dealershipId = req.body.dealership_id;
+    console.log(id ,dealershipId)
     if (dealershipId !== id)
       return res
         .status(400)
-        .send({ status: false, message: "user id not valid" });
+        .send({ status: false, message: "dealer id not valid" });
     next();
-
   } catch (err) {
     return res.status(500).send({ message: err.message });
   }

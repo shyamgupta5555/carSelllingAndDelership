@@ -1,5 +1,6 @@
 const DealershipSchema = require("../models/dealershipModel")
 const bcrypt = require('bcryptjs');
+const {generateToken} =require("../helpers/jwt")
 
 
 // Create a new dealership
@@ -32,7 +33,7 @@ exports.login= async(req, res)=> {
   try {
     const dealer = await DealershipSchema.findByEmail(email );
     if (!dealer) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: 'dealer not found' });
     }
     const passwordMatch = bcrypt.compare(password, dealer.password);
     if (!passwordMatch) {
