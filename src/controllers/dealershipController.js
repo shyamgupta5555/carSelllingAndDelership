@@ -1,4 +1,6 @@
 const DealershipSchema = require("../models/dealershipModel")
+const bcrypt = require('bcryptjs');
+
 
 // Create a new dealership
 exports.createDealership = async (req, res) => {
@@ -7,7 +9,7 @@ exports.createDealership = async (req, res) => {
     const dealershipData = {
       name: name,
       email: email,
-      password: password,
+      password: await bcrypt.hash(password,10),
       location: location,
       dealership_info:{dealership_info},
       cars: [],
@@ -15,7 +17,6 @@ exports.createDealership = async (req, res) => {
       sold_vehicles: [],
     };
     
-    console.log(req.body)
     const dealership = await DealershipSchema.save(dealershipData);
 
     res.status(201).json(dealership);
@@ -24,6 +25,26 @@ exports.createDealership = async (req, res) => {
   }
 };
 
+
+
+exports.login= async(req, res)=> {
+  const { email, password } = req.body;
+  try {
+    const dealer = await DealershipSchema.findByEmail(email );
+    if (!dealer) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const passwordMatch = bcrypt.compare(password, dealer.password);
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    const token = generateToken({ id : dealer._id });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 // Get all dealerships
 exports.getAllDealerships = async (req, res) => {
   try {

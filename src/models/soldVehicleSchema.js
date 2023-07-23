@@ -21,7 +21,6 @@ const SoldVehicles = {
 };
 
 
-
 module.exports = SoldVehicles;
 
 // {

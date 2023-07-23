@@ -23,9 +23,9 @@ exports.authentication = async (req, res, next) => {
 
 exports.authorization = async (req, res, next) => {
   try {
-    let user = req.id;
-    let userId = req.body.userId;
-    if (userId !== user)
+    let id = req.id;
+    let dealershipId = req.body.dealershipId;
+    if (dealershipId !== id)
       return res
         .status(400)
         .send({ status: false, message: "user id not valid" });

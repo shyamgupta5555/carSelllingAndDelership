@@ -11,12 +11,15 @@ const User = {
 
   findById: async function (id) {
     const db = getDb();
-    return db.collection('users').findOne({_id : new ObjectId(id)});;
+    return await db.collection('users').findOne({_id : new ObjectId(id)});;
   },
 
   findByEmail: async function (email) {
     const db = getDb();
-    return db.collection('users').findOne({ email: email });
+    console.log(email)
+    const d =  await db.collection('users').findOne({ email: email });
+    return d
+
   },
 
   getAllUsers: async function () {

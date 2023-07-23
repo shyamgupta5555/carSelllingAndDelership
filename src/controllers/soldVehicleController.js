@@ -18,10 +18,8 @@ exports.soldCarUser = async (req,res)=>{
 
    const SoldVehicleId = await SoldVehicles.save(car_id , user_id )
    const addCar = await User.updateUserVehicles(user_id)
-
-
+   
   res.status(400).send({"message": "Deal created successfully" ,SoldVehicleId })
-
 
   }catch(error){
     return res.status(500).send({message :error.message})

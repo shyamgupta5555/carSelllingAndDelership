@@ -23,6 +23,14 @@ const  DealershipSchema = {
     return db.collection('dealerships').find({}).toArray();
   },
 
+  addSolidCar : async function(){
+    const db = getDb();
+    return db.collection('dealerships').updateOne(
+      { _id: dealershipId },
+      { $addToSet: { cars: carId } }
+    );;
+  },
+  
   addCarToDealership: async function (dealershipId, carId) {
     const db = getDb();
     return db.collection('dealerships').updateOne(
@@ -46,6 +54,7 @@ const  DealershipSchema = {
       { projection: { cars: 1, _id: 0 } }
     );
   },
+
 
   getDealershipDeals: async function (dealershipId) {
     const db = getDb();

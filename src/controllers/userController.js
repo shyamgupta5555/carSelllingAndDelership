@@ -1,11 +1,14 @@
 const User = require("../models/userModel");
+const bcrypt = require('bcryptjs');
+const { generateToken } = require('../helpers/jwt');
+
 
 const nameRegex = /^[A-Za-z\s]+$/;
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const passwordRegex = /^[a-zA-Z0-9]{5,}$/;
 
 exports.createUser = async (req, res) => {
-  const { name, email, password, location, vehicle_info ,user_info } = req.body;
+  let { name, email, password, location, vehicle_info ,user_info } = req.body;
 
   try {
     if (!name) return res.status(400).send({ error: "required name" });
@@ -17,6 +20,13 @@ exports.createUser = async (req, res) => {
     if (!passwordRegex.test(password))
       return res.send({ error: "password not valid" });
 
+      const check = await User.findByEmail(email );
+      if (!check) {
+        return res.status(404).json({ message: 'User mail already exist use another mail ' });
+      }
+      password = await bcrypt.hash(password, 10);
+
+ 
       const user = {
         name :name ,
         email :email ,
@@ -38,6 +48,27 @@ exports.createUser = async (req, res) => {
     return res.status(500).send({ message: error.message });
   }
 };
+
+
+exports.login= async(req, res)=> {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findByEmail(email );
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    const passwordMatch = bcrypt.compare(password, user.password);
+    console.log(passwordMatch)
+    if (!passwordMatch) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+    const token = generateToken({ userId: user._id });
+    res.status(201).json({ token });
+  } catch (error) {
+    console.error('Error during login:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
 
 // Get all users
 exports.getAllUsers = async (req, res) => {
@@ -90,3 +121,9 @@ exports.updateUserVehicles = async (req, res) => {
     res.status(500).json({ message: "An error occurred" });
   }
 };
+
+
+
+
+
+
